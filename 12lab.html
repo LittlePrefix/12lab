@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apskritimų Skaičiuoklė</title>
+    <style>
+        
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        .correct {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+
+
+<body>
+    <form id="circle">
+        <label for="minDiameter">Mažiausias diametras:</label>
+        <input type="number" id="minDiameter" required>
+        <br>
+        <label for="maxDiameter">Didžiausias diametras:</label>
+        <input type="number" id="maxDiameter" required>
+        <br>
+        <label for="circleCount">Apskritimų skaičius:</label>
+        <input type="number" id="circleCount" required>
+        <br>
+        <button type="button" id="calculateButton" onclick="calculateCircles()">Skaičiuoti</button>
+    
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        var circlesData=[];
+        function calculateCircles() {
+            var minDiameter = parseFloat(document.getElementById('minDiameter').value);
+            var maxDiameter = parseFloat(document.getElementById('maxDiameter').value);
+            var circleCount = parseInt(document.getElementById('circleCount').value);
+
+            if (isNaN(minDiameter) || isNaN(maxDiameter) || isNaN(circleCount) || minDiameter < 0 || maxDiameter < 0 || circleCount < 1 || minDiameter >= maxDiameter) {
+                alert('Įveskite tinkamus duomenis!');
+                return;
+            }
+
+            var step = (maxDiameter - minDiameter) / (circleCount - 1);
+            var areas = [];
+
+            for (var i = 0; i < circleCount; i++) {
+                var diameter = minDiameter + i * step;
+                var radius = diameter / 2;
+                var area = Math.PI * Math.pow(radius, 2);
+                areas.push(Math.round(area));
+            }
+            circlesData.push({ minDiameter, maxDiameter, circleCount, areas });
+
+            displayResults(areas);
+        }
+
+        function displayResults(areas) {
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h3>Rezultatai:</h3>';
+
+            areas.forEach(function(area, index) {
+                resultDiv.innerHTML += `Apskritimo ${index + 1} plotas: ${area}<br>`;
+            });
+
+            document.getElementById('calculateButton').classList.add('correct');
+        
+        displaySavedData();
+        }
+    
+        function displaySavedData() {
+            var savedDataDiv = document.getElementById('savedData');
+            savedDataDiv.innerHTML = '<h3>Duomenys:</h3>';
+
+            circlesData.forEach(function(data, index) {
+                savedDataDiv.innerHTML += ` Maž. diametras: ${data.minDiameter}<br> Did. diametras: ${data.maxDiameter}<br> Apskritimų skaičius: ${data.circleCount}<br>`;
+            });
+        }
+    </script>
+ <div id="savedData"></div>
+
+</body>
+</html>
